@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Деревья Москвы | Зелёное сердце столицы</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fbfaf7;
+            color: #1e2f2c;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        /* навигационное меню (замена точкам) */
+        .top-nav {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 250, 240, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            border-bottom: 1px solid #dde6df;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-weight: 500;
+        }
+        .top-nav a {
+            text-decoration: none;
+            color: #2b5a44;
+            font-weight: 600;
+            padding: 0.4rem 1rem;
+            border-radius: 40px;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+        .top-nav a:hover {
+            background-color: #2b7a4b;
+            color: white;
+        }
+        .top-nav a.active {
+            background-color: #2b7a4b;
+            color: white;
+        }
+
+        .page {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            scroll-margin-top: 70px;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        h1 {
+            font-size: clamp(2.8rem, 8vw, 4.8rem);
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            margin-bottom: 1.5rem;
+            border-left: 5px solid #2b7a4b;
+            padding-left: 1.2rem;
+        }
+
+        .lead {
+            font-size: 1.2rem;
+            color: #2c4b3e;
+            max-width: 700px;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #2b7a4b;
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 60px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid #2b7a4b;
+            color: #2b7a4b;
+        }
+
+        .btn-outline:hover {
+            background: #2b7a4b;
+            color: white;
+        }
+
+        .btn:hover {
+            background-color: #1f5e3b;
+            transform: translateY(-2px);
+        }
+
+        /* секция 1: герой + фон */
+        .hero {
+            background: linear-gradient(112deg, #eaf7ed 0%, #d4e6da 100%);
+            border-radius: 0 0 48px 48px;
+            margin-bottom: 0;
+        }
+        .hero .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 85vh;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: rgba(255,255,240,0.7);
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            padding: 1rem 1.6rem;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1a4d3a;
+        }
+
+        /* галерея */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .tree-card {
+            background: white;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px -12px rgba(0,0,0,0.1);
+            transition: transform 0.25s ease;
+        }
+        .tree-card:hover {
+            transform: translateY(-6px);
+        }
+        .tree-img {
+            height: 220px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .tree-info {
+            padding: 1.4rem;
+        }
+        .tree-info h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.3rem;
+        }
+        .latin {
+            font-style: italic;
+            color: #5b7c6e;
+            font-size: 0.85rem;
+            margin-bottom: 0.7rem;
+        }
+        .tree-desc {
+            font-size: 0.95rem;
+            color: #2f3e38;
+        }
+
+        /* секция 3: карта + факты */
+        .split-layout {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: stretch;
+        }
+        .map-card {
+            flex: 1.2;
+            min-width: 260px;
+            background: white;
+            border-radius: 32px;
+            padding: 1rem;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+        }
+        .facts-card {
+            flex: 1;
+            background: #2b4b3c;
+            color: #f3f9e9;
+            border-radius: 32px;
+            padding: 1.8rem;
+        }
+        .facts-card h3 {
+            color: #f0f7d6;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        .facts-list {
+            list-style: none;
+        }
+        .facts-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.6rem;
+            position: relative;
+        }
+        .facts-list li::before {
+            content: "🌳";
+            position: absolute;
+            left: -0.2rem;
+            top: -1px;
+        }
+        .simple-map {
+            width: 100%;
+            height: 280px;
+            background: #cfe2cf;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            font-weight: 500;
+            color: #1f4d2e;
+            background-image: radial-gradient(circle at 10% 30%, #bdd8b1 1px, transparent 1px);
+            background-size: 20px 20px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.85rem;
+            color: #5e776b;
+            border-top: 1px solid #dde6df;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 780px) {
+            .container {
+                padding: 1.8rem;
+            }
+            h2 {
+                border-left-width: 4px;
+            }
+            .top-nav {
+                gap: 1rem;
+                padding: 0.6rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Верхнее меню вместо боковых точек -->
+<div class="top-nav">
+    <a href="#page1" class="nav-link" data-page="0">🌿 Главная</a>
+    <a href="#page2" class="nav-link" data-page="1">🌲 Виды деревьев</a>
+    <a href="#page3" class="nav-link" data-page="2">🗺️ Эко-карта & факты</a>
+</div>
+
+<!-- СТРАНИЦА 1: Главная – Деревья Москвы -->
+<section class="page hero" id="page1">
+    <div class="container">
+        <span style="font-weight: 600; color: #2b7a4b; letter-spacing: 1px;">🌿 МОСГОРПРИРОДА • НАСЛЕДИЕ</span>
+        <h1>Деревья Москвы:<br>зелёные лёгкие мегаполиса</h1>
+        <p class="lead">Более 8 миллионов деревьев формируют уникальный облик столицы. От вековых дубов Коломенского до кленовых аллей Арбата — каждое дерево хранит историю города.</p>
+        <div class="btn-group">
+            <a href="#page2" class="btn">Исследовать виды →</a>
+            <a href="#page3" class="btn btn-outline">Экология и карта</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-card"><span class="stat-number">~8 млн</span><br>деревьев в городе</div>
+            <div class="stat-card"><span class="stat-number">>250</span><br>видов и форм</div>
+            <div class="stat-card"><span class="stat-number">120+</span><br>особо охраняемых природных территорий</div>
+        </div>
+    </div>
+</section>
+
+<!-- СТРАНИЦА 2: Галерея – главные породы -->
+<section class="page" id="page2">
+    <div class="container">
+        <h2>🌲 Зелёные символы столицы</h2>
+        <p style="margin-bottom: 1rem; font-size: 1.1rem;">Липа, дуб, клён, береза и ясень — эти деревья формируют московский ландшафт. Узнайте их ближе.</p>
+        <div class="gallery-grid">
+            <!-- Липа -->
+            <div class="tree-card">
+                <div class="tree-img" style="background-image: url('lip.jpg');"></div>
+                <div class="tree-info">
+                    <h3>Липа мелколистная</h3>
+                    <div class="latin">Tilia cordata</div>
+                    <div class="tree-desc">Главная аллейная культура Москвы. Липовые парки (Царицыно, Нескучный сад) дарят густую тень и медовый аромат в июле.</div>
+                </div>
+            </div>
+            <!-- Дуб -->
+            <div class="tree-card">
+                <div class="tree-img" style="background-image: url('dub.jpg');"></div>
+                <div class="tree-info">
+                    <h3>Дуб черешчатый</h3>
+                    <div class="latin">Quercus robur</div>
+                    <div class="tree-desc">Самые старые деревья Москвы — дубы-долгожители (возраст до 400 лет) в Коломенском и парке «Кузьминки».</div>
+                </div>
+            </div>
+            <!-- Клён -->
+            <div class="tree-card">
+                <div class="tree-img" style="background-image: url('klen.jpg');"></div>
+                <div class="tree-info">
+                    <h3>Клён остролистный</h3>
+                    <div class="latin">Acer platanoides</div>
+                    <div class="tree-desc">Осенняя Москва немыслима без кленового золота. Устойчив к городской среде, украшает бульвары и дворы.</div>
+                </div>
+            </div>
+            <!-- Берёза -->
+            <div class="tree-card">
+                <div class="tree-img" style="background-image: url('ber.JPG');"></div>
+                <div class="tree-info">
+                    <h3>Берёза повислая</h3>
+                    <div class="latin">Betula pendula</div>
+                    <div class="tree-desc">Символ русского пейзажа. В Москве березы растут в природных заказниках: «Воробьёвы горы», «Серебряный бор».</div>
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 2rem; text-align: center;">
+            <a href="#page3" class="btn" style="background: #1f5e3b;">Узнать экологическую карту →</a>
+        </div>
+    </div>
+</section>
+
+<!-- СТРАНИЦА 3: Карта и экологические факты -->
+<section class="page" id="page3">
+    <div class="container">
+        <div class="split-layout">
+            <div class="map-card">
+                <h3 style="font-family: 'Playfair Display'; margin-bottom: 1rem;">🗺️ Зелёная карта Москвы</h3>
+                <p style="margin-bottom: 1rem;">Ключевые природные территории: «Лосиный Остров» (национальный парк), «Битцевский лес», «Измайлово», «Царицыно» и более 120 ООПТ.</p>
+                <!-- Интерактивная схематичная карта -->
+                <div class="simple-map" id="moscowMap">
+                    <svg viewBox="0 0 400 200" style="width:100%; height:100%; background: #d9e8cf; border-radius: 24px;">
+                        <circle cx="180" cy="70" r="6" fill="#2b7a4b" stroke="white" stroke-width="1.5" />
+                        <text x="185" y="65" font-size="8" fill="#1e3b2a">Лосиный Остров</text>
+                        <circle cx="250" cy="100" r="5" fill="#2b7a4b" stroke="white" stroke-width="1.2" />
+                        <text x="255" y="95" font-size="7" fill="#1e3b2a">Битцевский лес</text>
+                        <circle cx="120" cy="120" r="5" fill="#2b7a4b" stroke="white" />
+                        <text x="125" y="115" font-size="7" fill="#1e3b2a">Коломенское</text>
+                        <circle cx="300" cy="80" r="5" fill="#d88c3a" stroke="white" />
+                        <text x="305" y="75" font-size="7" fill="#6a3e1a">Сокольники</text>
+                        <circle cx="70" cy="150" r="5" fill="#2b7a4b" stroke="white" />
+                        <text x="75" y="145" font-size="7" fill="#1e3b2a">Фили-Кунцево</text>
+                        <path d="M40 180 L360 180" stroke="#9bbf8b" stroke-width="2" stroke-dasharray="4" />
+                        <text x="20" y="185" font-size="6" fill="#456b3a">МКАД (лесопарковый пояс)</text>
+                        <rect x="10" y="10" width="380" height="180" fill="none" stroke="#8aaE7a" stroke-width="1" rx="12" />
+                    </svg>
+                </div>
+                <p class="tree-desc" style="margin-top: 12px; font-size:0.85rem;">⭐ Зелёные точки — основные лесные массивы. Москва — один из самых озеленённых мегаполисов мира.</p>
+            </div>
+            <div class="facts-card">
+                <h3>🌱 Экологические проекты</h3>
+                <ul class="facts-list">
+                    <li>Программа «Миллион деревьев»: высажено более 1,2 млн деревьев и кустарников с 2013 года.</li>
+                    <li>Ежегодно в Москве появляется 150–200 новых скверов и парков.</li>
+                    <li>Деревья снижают температуру воздуха летом до 5°C и поглощают до 30% вредных выбросов.</li>
+                    <li>Самый старый дуб Москвы (Петровский дуб) растёт в Коломенском — ему около 400 лет.</li>
+                    <li>Главный ботанический сад РАН хранит коллекцию из 2000 видов деревьев и кустарников.</li>
+                </ul>
+                <div style="margin-top: 1.5rem; background: #3f6b58; border-radius: 24px; padding: 1rem;">
+                    <span style="font-weight: bold;">🍃 «Зелёный каркас»:</span> к 2030 году планируется увеличить площадь озеленённых территорий до 50% от площади города.
+                </div>
+            </div>
+        </div>
+        <div style="margin-top: 2rem; text-align: center;">
+            <a href="#page1" class="btn btn-outline">Вернуться к началу</a>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>🌳 Деревья Москвы — наше общее достояние. Проект о природе столицы. Данные: Департамент природопользования, 2026</p>
+    <p style="margin-top: 0.5rem;">#МосковскийДуб #ЗелёныйГрад #ЛиповыеАллеи</p>
+</footer>
+
+<script>
+    (function() {
+        // Получаем все страницы и пункты меню
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.top-nav .nav-link');
+        
+        // Функция обновления активного пункта меню на основе видимой страницы
+        function updateActiveMenu() {
+            let activeIndex = 0;
+            const scrollPosition = window.scrollY + 120; // с учетом sticky меню
+            
+            for (let i = 0; i < pages.length; i++) {
+                const page = pages[i];
+                const pageTop = page.offsetTop;
+                const pageBottom = pageTop + page.offsetHeight;
+                
+                if (scrollPosition >= pageTop && scrollPosition < pageBottom) {
+                    activeIndex = i;
+                    break;
+                }
+            }
+            
+            navLinks.forEach((link, idx) => {
+                const pageNum = parseInt(link.getAttribute('data-page'));
+                if (pageNum === activeIndex) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+        
+        // Плавная прокрутка при клике на меню
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href'); // #page1, #page2, #page3
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const offset = 70; // высота sticky меню
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+                    
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                    
+                    // обновляем активный класс после прокрутки (через событие scroll)
+                    setTimeout(() => updateActiveMenu(), 100);
+                }
+            });
+        });
+        
+        // Обработка кликов на кнопки внутри страниц (они ведут на якоря)
+        const allButtons = document.querySelectorAll('.btn, a[href^="#page"]');
+        allButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const href = btn.getAttribute('href');
+                if (href && href.startsWith('#page')) {
+                    e.preventDefault();
+                    const targetElem = document.querySelector(href);
+                    if (targetElem) {
+                        const offset = 70;
+                        const elemPosition = targetElem.getBoundingClientRect().top;
+                        const offsetPos = elemPosition + window.pageYOffset - offset;
+                        window.scrollTo({ top: offsetPos, behavior: 'smooth' });
+                        setTimeout(() => updateActiveMenu(), 100);
+                    }
+                }
+            });
+        });
+        
+        // Следим за скроллом для подсветки меню
+        window.addEventListener('scroll', () => {
+            requestAnimationFrame(updateActiveMenu);
+        });
+        window.addEventListener('resize', () => {
+            updateActiveMenu();
+        });
+        
+        // Инициализация активного пункта при загрузке
+        updateActiveMenu();
+        
+        // Интерактив для карты (всплывающее сообщение)
+        const mapBlock = document.getElementById('moscowMap');
+        if (mapBlock) {
+            mapBlock.addEventListener('click', () => {
+                const toast = document.createElement('div');
+                toast.textContent = '🌳 Лосиный Остров — крупнейший лесной массив в черте города (116 кв.км)';
+                toast.style.position = 'fixed';
+                toast.style.bottom = '24px';
+                toast.style.left = '24px';
+                toast.style.backgroundColor = '#2b7a4b';
+                toast.style.color = 'white';
+                toast.style.padding = '10px 20px';
+                toast.style.borderRadius = '40px';
+                toast.style.fontSize = '0.85rem';
+                toast.style.fontWeight = '500';
+                toast.style.zIndex = '1000';
+                toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+                toast.style.backdropFilter = 'blur(4px)';
+                document.body.appendChild(toast);
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2600);
+            });
+        }
+        
+        // Также добавляем лёгкое обновление URL hash при скролле, но без точек и без мерцания
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            if (scrollTimeout) clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                let activePageIndex = 0;
+                const scrollPos = window.scrollY + 100;
+                for (let i = 0; i < pages.length; i++) {
+                    const page = pages[i];
+                    const top = page.offsetTop;
+                    const bottom = top + page.offsetHeight;
+                    if (scrollPos >= top && scrollPos < bottom) {
+                        activePageIndex = i;
+                        break;
+                    }
+                }
+                const newHash = `#page${activePageIndex + 1}`;
+                if (window.location.hash !== newHash && history.replaceState) {
+                    history.replaceState(null, null, newHash);
+                }
+            }, 80);
+        });
+        
+        // Обработка прямого перехода по хэшу при загрузке
+        if (window.location.hash) {
+            const targetHash = window.location.hash;
+            const targetElement = document.querySelector(targetHash);
+            if (targetElement) {
+                setTimeout(() => {
+                    const offset = 70;
+                    const elemPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPos = elemPosition + window.pageYOffset - offset;
+                    window.scrollTo({ top: offsetPos, behavior: 'smooth' });
+                    updateActiveMenu();
+                }, 100);
+            }
+        }
+    })();
+</script>
+</body>
+</html>
